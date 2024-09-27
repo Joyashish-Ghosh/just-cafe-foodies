@@ -31,7 +31,7 @@ const Footer = () => {
             </div>
             <div className="footer-center p-4 bg-base-300 text-base-content">
                 <aside>
-                <p>Copyright © 2024 - All right reserved by ACME Industries Ltd</p>
+                <p>Copyright © 2024 - All right reserved by just cafe foodies</p>
 
                 </aside>
             </div>
