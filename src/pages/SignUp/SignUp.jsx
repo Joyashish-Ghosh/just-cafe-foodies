@@ -2,20 +2,52 @@ import { useContext } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../../providers/AuthProvider";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 
 const SignUp = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
-    const {createUser} = useContext(AuthContext);
+    const axiosPublic = useAxiosPublic();
+    const { register, handleSubmit, reset, formState: { errors } } = useForm();
+    const { createUser, updateUserProfile } = useContext(AuthContext);
+    const navigate = useNavigate()
 
     const onSubmit = data => {
-        console.log(data);
+        // console.log(data);
         createUser(data.email, data.password)
-        .then(result => {
-            const loggedUser = result.user;
-            console.log(loggedUser);
-        })
+            .then(result => {
+                const loggedUser = result.user;
+                console.log(loggedUser);
+
+
+
+                // updateUserProfile(data.name, data.photoURL)
+                //     .then(() => {
+                //         console.log("profile updated")
+                        
+                //     })
+                    reset();
+                    navigate('/');
+
+                // aktu problem ase .then er line,ar akta .then besi  use kora ase
+                
+                // create userentry in the database
+                const userInfo = {
+                    email: data.email
+                }
+                axiosPublic.post('/users', userInfo)
+                    .then(res => {
+                        if (res.data.insertedId) {
+                            console.log('user added to the database')
+
+
+                        }
+                    })
+
+
+            })
+            .catch(error => console.log(error));
+
     };
 
     return (
@@ -39,6 +71,17 @@ const SignUp = () => {
                                 {errors.name && <span className="text-red-600" >The name is empty</span>}
 
                             </div>
+
+                            {/* <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Photo URL</span>
+                                    imgBB theke banano photo URL link: https://ibb.co.com/PjMq2Bw
+                                </label>
+                                <input type="text" {...register("photoURL", { required: true })} placeholder="photo URL" className="input input-bordered" />
+                                {errors.photoURL && <span className="text-red-600" >Photo URl is require</span>}
+
+                            </div> */}
+
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Email</span>
@@ -56,7 +99,7 @@ const SignUp = () => {
                                     required: true,
                                     minLength: 4,
                                     maxLength: 20,
-                                    pattern: /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$/
+                                    pattern: /^(?=.*[a-z])(?=.*[0-9]).*$/
 
                                 })}
                                     placeholder="password" className="input input-bordered" />
@@ -73,7 +116,7 @@ const SignUp = () => {
                                 <input className="btn btn-primary" type="submit" value="Sign Up" />
                             </div>
                         </form>
-                        <p><small>Already have an account?<Link to="/login">  Login</Link></small></p>
+                        <p className="px-6" ><small>Already have an account?<Link to="/login">  Login</Link></small></p>
                     </div>
                 </div>
             </div>

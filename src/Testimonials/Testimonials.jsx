@@ -10,7 +10,9 @@ import { useEffect, useState } from "react";
 const Testimonials = () => {
     const [reviews, setReviews] = useState([]);
     useEffect(() => {
-        fetch('reviews.jsonhttp://localhost:5000/reviews')
+         fetch ('http://localhost:5000/reviews')
+        // ata course e silo,chatgpt dheke nicher ta bosoisi.... ('reviews.jsonhttp://localhost:5000/reviews')
+          
             .then(res => res.json())
             .then(data => setReviews(data))
     }, [])
