@@ -32,7 +32,7 @@ axiosSecure.interceptors.response.use(function(response) {
     // for 401 or 403 logout the user and move the user to the login page
     if(status === 401 || status ===403){
         await logOut();
-        Navigate('/login')
+        Navigate('/login');
     }
     return Promise.reject(error);
 });
