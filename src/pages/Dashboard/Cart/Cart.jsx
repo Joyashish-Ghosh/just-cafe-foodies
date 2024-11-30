@@ -6,7 +6,8 @@ import { Link } from "react-router-dom";
 
 const Cart = () => {
   const [cart, refetch] = useCart();
-  const totalPrice = cart.reduce((total, item) => total + item.price, 0);
+  console.log(cart);
+  const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
   const axiosSecure = useAxiosSecure();
 
   const handleDelete = (id) => {
@@ -54,8 +55,9 @@ const Cart = () => {
               <th>Image</th>
               <th>Name</th>
               <th>Price</th>
+              <th>Quantity</th>
+              <th>Amount</th>
               <th>Action</th>
-              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -75,7 +77,9 @@ const Cart = () => {
                   </div>
                 </td>
                 <td>{item.name}</td>
-                <td>${item.price}</td>
+                <td>{item.price} BDT</td>
+                <td>{item.quantity}</td>
+                <td>{(item.quantity * item.price).toFixed(2)}</td>
                 <th>
                   <button
                     onClick={() => handleDelete(item._id)}

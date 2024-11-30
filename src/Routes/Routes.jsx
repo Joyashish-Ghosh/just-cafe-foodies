@@ -18,6 +18,9 @@ import Payment from "../pages/Dashboard/Payment/Payment";
 import PaymentHistory from "../pages/Dashboard/PaymentHistory/PaymentHistory";
 import UserHome from "../pages/Dashboard/UserHome/UserHome";
 import AdminHome from "../pages/Dashboard/AdminHome/AdminHome";
+import ChefRoute from "./ChefRoute";
+import ChefHome from "../pages/ChefHome/Chefhome";
+import PaymentSuccess from "../pages/Dashboard/Payment/PaymentSuccess";
 
 export const router = createBrowserRouter([
   {
@@ -78,10 +81,15 @@ export const router = createBrowserRouter([
         element: <Payment></Payment>,
       },
       {
+        path: "payment/success/:tran_id",
+        element: <PaymentSuccess></PaymentSuccess>,
+      },
+      {
         path: "paymentHistory",
         element: <PaymentHistory></PaymentHistory>,
       },
 
+      
       //admin routes
 
       {
@@ -127,6 +135,12 @@ export const router = createBrowserRouter([
           </AdminRoute>
         ),
       },
+      //chef users
+      
+      {
+        path: '/dashboard/chef-home',
+        element: <ChefRoute><ChefHome></ChefHome></ChefRoute>
+      }
     ],
   },
 ]);

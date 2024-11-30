@@ -16,9 +16,11 @@ const FoodCard = ({ item }) => {
 
 
     const handleAddToCart = food => {
+console.log(food);
         if (user && user.email) {
             //  send cart item to database
             // console.log(user.email, food);
+            
             const cartItem = {
                 menuId: _id,
                 email: user.email,
@@ -29,8 +31,8 @@ const FoodCard = ({ item }) => {
 
             axiosSecure.post('/carts' , cartItem)
             .then(res=>{
-                console.log(res.data)
-                if(res.data.insertedId){
+                console.log(res)
+                if(res.data.success){
                     Swal.fire({
                         position: "top-end",
                         icon: "success",
@@ -65,7 +67,7 @@ const FoodCard = ({ item }) => {
     return (
         <div className="card w-96 bg-base-100 shadow-xl">
             <figure><img src={image} alt="food" /></figure>
-            <p className=" absolute right-0 mr-4 mt-4 px-4 bg-slate-900">$ {price}</p>
+            <p className=" absolute right-0 mr-4 mt-4 px-4 bg-slate-900">${price}</p>
             <div className="card-body flex flex-col items-center">
                 <h2 className="card-title">{name}</h2>
                 <p>{recipe}</p>

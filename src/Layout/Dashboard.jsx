@@ -14,19 +14,21 @@ import { NavLink, Outlet } from "react-router-dom";
 import useCart from "../hooks/useCart";
 import useAdmin from "../hooks/useAdmin";
 import PaymentHistory from "./../pages/Dashboard/PaymentHistory/PaymentHistory";
+import useChef from "../hooks/useChef";
 
 const Dashboard = () => {
   const [cart] = useCart();
 
   // TODO:get admin value from the database
   const [isAdmin] = useAdmin();
+  const [isChef] = useChef();
 
   return (
     <div className="flex">
       {/* dashboard sidebar */}
       <div className="w-64 min-h-screen bg-orange-400">
         <ul className="menu p-4">
-          {isAdmin ? (
+          {isAdmin &&
             <>
               <li>
                 <NavLink to="/dashboard/AdminHome">
@@ -49,12 +51,12 @@ const Dashboard = () => {
                 </NavLink>
               </li>
 
-              <li>
+              {/* <li>
                 <NavLink to="/dashboard/bookings">
                   <FaBook></FaBook>
                   Manage Bookings
                 </NavLink>
-              </li>
+              </li> */}
 
               <li>
                 <NavLink to="/dashboard/Users">
@@ -63,7 +65,8 @@ const Dashboard = () => {
                 </NavLink>
               </li>
             </>
-          ) : (
+}
+{ !isChef && !isAdmin &&
             <>
               <li>
                 <NavLink to="/dashboard/userHome">
@@ -72,12 +75,12 @@ const Dashboard = () => {
                 </NavLink>
               </li>
 
-              <li>
+              {/* <li>
                 <NavLink to="/dashboard/history">
                   <FaCalendar></FaCalendar>
                   Not History
                 </NavLink>
-              </li>
+              </li> */}
 
               <li>
                 <NavLink to="/dashboard/cart">
@@ -100,7 +103,17 @@ const Dashboard = () => {
                 </NavLink>
               </li>
             </>
-          )}
+          }
+          {
+            isChef && <>
+            <li>
+              <NavLink to="/dashboard/chef-home">
+              <FaHome></FaHome>
+              Chef Home
+              </NavLink>
+            </li>
+            </>
+          }
 
           {/* shared nav links */}
 
