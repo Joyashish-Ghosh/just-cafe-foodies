@@ -29,7 +29,9 @@ const CheckoutForm = () => {
       // Add other necessary fields here
       cus_name: user.name,
       cus_email: user.email,
-      cus_phone: user.phone, // Ensure this information is available in your user data
+      cus_phone: user.phone, 
+      waiting_time : "unknown",
+      status: 'pending',
       cart,
     };
 

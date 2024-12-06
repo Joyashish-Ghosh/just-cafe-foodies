@@ -7,7 +7,8 @@ import { Link } from "react-router-dom";
 const Cart = () => {
   const [cart, refetch] = useCart();
   console.log(cart);
-  const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+  const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2);
+  // const totalPrice = .to
   const axiosSecure = useAxiosSecure();
 
   const handleDelete = (id) => {
