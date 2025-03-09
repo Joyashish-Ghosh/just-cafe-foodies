@@ -3,18 +3,18 @@ import { Parallax } from 'react-parallax';
 const Cover = ({ img, title }) => {
     return (
         <Parallax
-            blur={{ min: -150, max: 150}}
+            // blur={{ min: -400, max: 200}}
             bgImage={img}
             bgImageAlt="Menu item"
-            strength={-200}
+            strength={0}
         >
             <div className="hero h-[500px]" >
-                <div className="hero-overlay bg-opacity-60"></div>
+                <div className="hero-overlay bg-opacity-4"></div>
                 <div className="hero-content text-center text-neutral-content">
                     <div className="max-w-md">
-                        <h1 className="mb-5 text-5xl font-bold uppercase">{title}</h1>
-                        <p className="mb-5">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
-                        <button className="btn btn-primary">Get Started</button>
+                        <h1 className=" mt-36 text-3xl  font-bold uppercase text-gray-200">{title}</h1>
+                        <p className="mt-6">Just Cafe Foodies is dedicated to offering a warm and inviting dining experience, combining high-quality food with a relaxed café ambiance. We specialize in freshly prepared café-style meals, beverages, and desserts, ensuring every dish is made with premium ingredients. </p>
+                       
                     </div>
                 </div>
             </div>    </Parallax>

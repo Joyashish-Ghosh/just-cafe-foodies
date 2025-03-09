@@ -40,7 +40,7 @@ const Navbar = () => {
 
     <li>
       <Link to="/dashboard/cart">
-        <button className="btn">
+        <button className="btn min-h-0 h-8">
           <FaShoppingCart className="mr-2"></FaShoppingCart>
           <div className="badge badge-secondary">+{cart.length}</div>
         </button>
@@ -62,7 +62,7 @@ const Navbar = () => {
   </>
   return (
     <div>
-      <div className="navbar fixed z-10 max-w-screen-xl bg-opacity-30 bg-black text-white">
+      <div className="navbar fixed z-10 max-w-screen-xl bg--4 bg-gray-600 text-white rounded-lg h-0 ">
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -80,7 +80,8 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="navbar-end">
-          <a className="btn">Get Started</a>
+          <a className="btn hover bg-gray-400"><Link to="/menu">Get Started</Link></a>
+
         </div>
       </div>
     </div>

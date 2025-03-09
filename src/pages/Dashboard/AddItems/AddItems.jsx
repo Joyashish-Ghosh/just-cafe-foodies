@@ -28,8 +28,10 @@ const AddItems = () => {
 				name: data.name,
 				category: data.category,
 				price: parseFloat(data.price),
+				date: data.date ,
 				recipe: data.recipe,
-				image: res.data.data.display_url
+				image: res.data.data.display_url,
+			
 			};   
 			//
 			const menuRes = await axiosSecure.post('/menu', menuItem);
@@ -104,6 +106,16 @@ const AddItems = () => {
 							/>
 						</div>
 					</div>
+					<div className="form-control w-full my-6">
+    <label className="label">
+        <span className="label-text">Select Date</span>
+    </label>
+    <input
+        type="date"
+        {...register('date')}
+        className="input input-bordered w-full"
+    />
+</div>
 
 					{/* food details */}
 					<label className="form-control">

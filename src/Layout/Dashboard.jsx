@@ -26,7 +26,7 @@ const Dashboard = () => {
   return (
     <div className="flex">
       {/* dashboard sidebar */}
-      <div className="w-64 min-h-screen bg-orange-400">
+      <div className="w-64 min-h-screen bg-gray-700 rounded-lg text-2xl text-white font-bold">
         <ul className="menu p-4">
           {isAdmin &&
             <>
@@ -64,6 +64,7 @@ const Dashboard = () => {
                   All Users
                 </NavLink>
               </li>
+              
             </>
 }
 { !isChef && !isAdmin &&

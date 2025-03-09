@@ -1,23 +1,24 @@
 import SectionTitle from "../../../Components/SectionTitle/SectionTitle";
 import featuredImg from '../../../assets/home/featured.jpg';
 import './Featured.css';
+import { Link } from "react-router-dom";
+
 const Featured = () => {
     return (
         <div className="featured-item bg-fixed text-white pt-8 my-20 ">
             <SectionTitle 
-                subHeading="Check it Out" heading="Featured Item"
+                subHeading="" heading="Featured Item"
             ></SectionTitle>
-            <div className="bg-red-400 bg-opacity-20 md:flex justify-center items-center pb-20 bt-12 py-20 px-36 ">
+            <div className=" md:flex justify-center items-center   py-0 px-4 ">
                 <div className="mb-8" >
                 <img src={featuredImg} alt="" />
             </div>
             <div className="md:ml-8 text-white ">
-                <p>
-                    Aug 20,2024
-                </p>
-                <p  className="uppercase">Where can i get some?</p>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti labore culpa voluptatibus accusantium maiores aliquid vel provident doloremque, in facilis, tempore minima voluptas perspiciatis eos similique quisquam dolor veritatis perferendis sapiente at. Aut quaerat dolores tempore ab in! Ex, consectetur. Voluptate quam enim amet suscipit inventore aut blanditiis! Aut, quidem?</p>
-          <button className="btn btn-outline bg-red-500 border-0 border-b-4 mt-4">Order Now</button>
+                
+                
+          <p>Just Cafe Foodies is a welcoming and casual dining experience that blends quality food with a cozy café atmosphere. Our focus is on serving freshly prepared dishes, including a variety of café-style meals, beverages, and desserts. The project emphasizes sourcing high-quality ingredients, maintaining excellent customer service, and implementing a seamless ordering system for both dine-in and takeaway customers.</p>
+          <button className="btn btn-outline bg-red-500 border-0 border-b-4 mt-4"><Link to="/order/salad">Order Now</Link></button>
+      
 
             </div>
             </div>

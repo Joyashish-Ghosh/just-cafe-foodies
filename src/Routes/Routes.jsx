@@ -1,3 +1,4 @@
+
 import { createBrowserRouter } from "react-router-dom";
 import Main from "../Layout/Main";
 import Home from "../pages/Home/Home/Home";
@@ -15,12 +16,12 @@ import AdminRoute from "./AdminRoute";
 import ManageItems from "../pages/Dashboard/ManageItems/ManageItems";
 import UpdateItem from "../pages/Dashboard/UpdateItem/UpdateItem";
 import Payment from "../pages/Dashboard/Payment/Payment";
-import PaymentHistory from "../pages/Dashboard/PaymentHistory/PaymentHistory";
 import UserHome from "../pages/Dashboard/UserHome/UserHome";
 import AdminHome from "../pages/Dashboard/AdminHome/AdminHome";
 import ChefRoute from "./ChefRoute";
 import ChefHome from "../pages/ChefHome/Chefhome";
 import PaymentSuccess from "../pages/Dashboard/Payment/PaymentSuccess";
+import PaymentHistory from './../pages/Dashboard/PaymentHistory/PaymentHistory';
 
 export const router = createBrowserRouter([
   {
@@ -88,6 +89,8 @@ export const router = createBrowserRouter([
         path: "paymentHistory",
         element: <PaymentHistory></PaymentHistory>,
       },
+      
+      
 
       
       //admin routes
@@ -98,8 +101,16 @@ export const router = createBrowserRouter([
           <AdminRoute>
             <AdminHome></AdminHome>
           </AdminRoute>
-        ),
-      },
+        ),},
+      //   {
+      //   path: "paymentHistory",
+      //   element: (
+      //     <AdminRoute>
+      //     <PaymentHistory></PaymentHistory>,
+      //     </AdminRoute>
+      //   ),
+       
+      // },
       {
         path: "addItems",
         element: (

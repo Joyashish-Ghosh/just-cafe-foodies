@@ -17,7 +17,7 @@ const Order = () => {
 
     const [tabIndex, setTabIndex] = useState(initialIndex);
     const [menu] = useMenu();
-    // console.log(category);
+    console.log(category);
 
     const desserts = menu.filter(item => item.category === 'dessert');
     const soup = menu.filter(item => item.category === 'soup');
@@ -30,7 +30,7 @@ const Order = () => {
              <Helmet>
                 <title>Just Cafe | Order Food</title>
             </Helmet>
-            <Cover img={orderCoverImg} title="Order Food "  ></Cover>
+            <Cover img={orderCoverImg} title="Order Food"  ></Cover>
             <Tabs defaultIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
                 <TabList>
                     <Tab>Salad</Tab>
