@@ -7,10 +7,19 @@ import { Link } from "react-router-dom";
 const Cart = () => {
   const [cart, refetch] = useCart();
   console.log(cart);
-  const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2);
-  // const totalPrice = .to
+
+  // Get the current date
+  const currentDate = new Date().toLocaleDateString(); // Format the date as you prefer
+
+  // Calculate total price
+  const totalPrice = cart.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  ).toFixed(2);
+
   const axiosSecure = useAxiosSecure();
 
+  // Handle delete item from cart
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -27,7 +36,7 @@ const Cart = () => {
             refetch();
             Swal.fire({
               title: "Deleted!",
-              text: "Your file has been deleted.",
+              text: "Your item has been deleted.",
               icon: "success",
             });
           }
@@ -39,16 +48,21 @@ const Cart = () => {
   return (
     <div>
       <div className="flex justify-evenly mb-8">
-        <h2 className="text-4xl"> Items: {cart.length}</h2>
-        <h2 className="text-4xl"> Total Price: {totalPrice}</h2>
-      {  cart.length ?  <Link to="/dashboard/payment">
-          <button  className="btn btn-primary">Pay</button>
-        </Link>:
-                  <button disabled className="btn btn-primary">Pay</button>
-} 
+        <h2 className="text-4xl">Items: {cart.length}</h2>
+        <h2 className="text-4xl">Total Price: {totalPrice}</h2>
+
+        {cart.length ? (
+          <Link to="/dashboard/payment">
+            <button className="btn btn-primary">Pay</button>
+          </Link>
+        ) : (
+          <button disabled className="btn btn-primary">
+            Pay
+          </button>
+        )}
       </div>
 
-      <div className="overflow-x-auto ">
+      <div className="overflow-x-auto">
         <table className="table w-full">
           <thead>
             <tr>
@@ -58,6 +72,7 @@ const Cart = () => {
               <th>Price</th>
               <th>Quantity</th>
               <th>Amount</th>
+              <th>Order Date</th> {/* Add the Order Date Column */}
               <th>Action</th>
             </tr>
           </thead>
@@ -78,15 +93,17 @@ const Cart = () => {
                   </div>
                 </td>
                 <td>{item.name}</td>
+
                 <td>{item.price} BDT</td>
                 <td>{item.quantity}</td>
                 <td>{(item.quantity * item.price).toFixed(2)}</td>
+                <td>{item.orderDate || currentDate}</td> {/* Show the order date */}
                 <th>
                   <button
                     onClick={() => handleDelete(item._id)}
                     className="btn btn-ghost btn-lg"
                   >
-                    <FaTrashAlt className="text-red-600"></FaTrashAlt>
+                    <FaTrashAlt className="text-red-600" />
                   </button>
                 </th>
               </tr>
