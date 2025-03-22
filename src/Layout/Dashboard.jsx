@@ -28,7 +28,7 @@ const Dashboard = () => {
       {/* dashboard sidebar */}
       <div className="w-64 min-h-screen bg-gray-700 rounded-lg text-2xl text-white font-bold">
         <ul className="menu p-4">
-          {isAdmin &&
+          {isAdmin && (
             <>
               <li>
                 <NavLink to="/dashboard/AdminHome">
@@ -51,23 +51,28 @@ const Dashboard = () => {
                 </NavLink>
               </li>
 
-              {/* <li>
-                <NavLink to="/dashboard/bookings">
-                  <FaBook></FaBook>
-                  Manage Bookings
-                </NavLink>
-              </li> */}
-
               <li>
                 <NavLink to="/dashboard/Users">
                   <FaUsers></FaUsers>
                   All Users
                 </NavLink>
               </li>
-              
+
+              <li>
+                <NavLink to="/dashboard/checkReview">
+                  <FaBook></FaBook>
+                  Check Review
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard/report">
+                  <FaBook></FaBook>
+                  Report
+                </NavLink>
+              </li>
             </>
-}
-{ !isChef && !isAdmin &&
+          )}
+          {!isChef && !isAdmin && (
             <>
               <li>
                 <NavLink to="/dashboard/userHome">
@@ -104,17 +109,17 @@ const Dashboard = () => {
                 </NavLink>
               </li>
             </>
-          }
-          {
-            isChef && <>
-            <li>
-              <NavLink to="/dashboard/chef-home">
-              <FaHome></FaHome>
-              Chef Home
-              </NavLink>
-            </li>
+          )}
+          {isChef && (
+            <>
+              <li>
+                <NavLink to="/dashboard/chef-home">
+                  <FaHome></FaHome>
+                  Chef Home
+                </NavLink>
+              </li>
             </>
-          }
+          )}
 
           {/* shared nav links */}
 

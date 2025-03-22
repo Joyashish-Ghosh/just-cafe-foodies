@@ -22,6 +22,9 @@ import ChefRoute from "./ChefRoute";
 import ChefHome from "../pages/ChefHome/Chefhome";
 import PaymentSuccess from "../pages/Dashboard/Payment/PaymentSuccess";
 import PaymentHistory from './../pages/Dashboard/PaymentHistory/PaymentHistory';
+import Review from "../pages/Dashboard/Review/Review";
+import CheckReview from "../pages/Dashboard/CheckReview/CheckReview";
+import Report from "../pages/Dashboard/Report/Report";
 
 export const router = createBrowserRouter([
   {
@@ -89,6 +92,10 @@ export const router = createBrowserRouter([
         path: "paymentHistory",
         element: <PaymentHistory></PaymentHistory>,
       },
+      {
+        path: "review",
+        element: <Review>,</Review>
+      },
       
       
 
@@ -102,15 +109,7 @@ export const router = createBrowserRouter([
             <AdminHome></AdminHome>
           </AdminRoute>
         ),},
-      //   {
-      //   path: "paymentHistory",
-      //   element: (
-      //     <AdminRoute>
-      //     <PaymentHistory></PaymentHistory>,
-      //     </AdminRoute>
-      //   ),
-       
-      // },
+     
       {
         path: "addItems",
         element: (
@@ -146,6 +145,27 @@ export const router = createBrowserRouter([
           </AdminRoute>
         ),
       },
+
+         {
+        path: "checkReview",
+        element: (
+          <AdminRoute>
+        <CheckReview></CheckReview>
+          </AdminRoute>
+        ),
+       
+      },
+         {
+        path: "report",
+        element: (
+          <AdminRoute>
+         <Report></Report>
+          </AdminRoute>
+        ),
+       
+      },
+
+
       //chef users
       
       {
