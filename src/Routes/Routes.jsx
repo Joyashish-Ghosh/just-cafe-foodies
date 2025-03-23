@@ -25,6 +25,7 @@ import PaymentHistory from './../pages/Dashboard/PaymentHistory/PaymentHistory';
 import Review from "../pages/Dashboard/Review/Review";
 import CheckReview from "../pages/Dashboard/CheckReview/CheckReview";
 import Report from "../pages/Dashboard/Report/Report";
+import Cherity from "../pages/Dashboard/Report/Cherity";
 
 export const router = createBrowserRouter([
   {
@@ -160,6 +161,14 @@ export const router = createBrowserRouter([
         element: (
           <AdminRoute>
          <Report></Report>
+          </AdminRoute>
+        ),
+      },
+         {
+        path: "cherity",
+        element: (
+          <AdminRoute>
+<Cherity></Cherity>
           </AdminRoute>
         ),
        

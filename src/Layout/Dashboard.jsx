@@ -70,6 +70,12 @@ const Dashboard = () => {
                   Report
                 </NavLink>
               </li>
+              <li>
+                <NavLink to="/dashboard/cherity">
+                  <FaBook></FaBook>
+                  Cherity
+                </NavLink>
+              </li>
             </>
           )}
           {!isChef && !isAdmin && (

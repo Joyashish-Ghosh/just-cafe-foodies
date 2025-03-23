@@ -4,7 +4,7 @@ import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { FaBook, FaDollarSign, FaUsers } from "react-icons/fa";
 
-const AdminHome = () => {
+const Report = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const [fromDate, setFromDate] = useState("");
@@ -90,7 +90,7 @@ const AdminHome = () => {
       );
       return res.data;
     },
-    enabled: !!fromDate && !!toDate,
+    enabled: !!user?.email && !!fromDate && !!toDate, // Ensure user.email exists
   });
 
   // Filter payments by selected date range
@@ -110,9 +110,6 @@ const AdminHome = () => {
     );
   });
 
-  if (isLoading)
-    return <h1 className="text-3xl font-bold text-green-800">Loading..........</h1>;
-
   // Flatten all items from filtered payments and create a continuous index
   const allItems = filteredPayments.flatMap((payment) =>
     payment.cart?.map((item) => ({
@@ -120,23 +117,54 @@ const AdminHome = () => {
       paymentDate: payment.payment_date, // include payment date to track where it's from
     }))
   );
-// Group sell items by name and price, summing their quantities
-const groupedSellItems = allItems.reduce((acc, item) => {
+  // Group sell items by name and price, summing their quantities
+  const groupedSellItems = allItems.reduce((acc, item) => {
     const key = `${item.name}-${item.price}`;
-  
+
     if (acc[key]) {
       acc[key].quantity += item.quantity || 1;
     } else {
       acc[key] = { ...item, quantity: item.quantity || 1 };
     }
-  
+
     return acc;
   }, {});
-  
+
   // Convert grouped items back to an array
   const groupedSellItemsArray = Object.values(groupedSellItems);
-  //extra food 
-  
+
+  //extra food
+  const extraFoodItems = useMemo(() => {
+    return groupedMenuItemsArray
+      .map((addItem) => {
+        const sellItem = groupedSellItems[
+          `${addItem.name}-${addItem.price}`
+        ] || { quantity: 0 };
+
+        // Ensure valid quantities for calculation
+        const addItemQuantity = addItem.quantity || 0;
+        const soldQuantity = sellItem.quantity;
+
+        // Check if there is an excess quantity
+        if (addItemQuantity > soldQuantity) {
+          return {
+            name: addItem.name,
+            price: addItem.price,
+            quantity: addItemQuantity - soldQuantity,
+          };
+        }
+        return null;
+      })
+      .filter(Boolean); // Filter out null values
+  }, [groupedMenuItemsArray, groupedSellItems]);
+
+  // cherity er jnno
+
+  if (isLoading)
+    return (
+      <h1 className="text-3xl font-bold text-green-800">Loading..........</h1>
+    );
+
   return (
     <div className="my-12">
       <div className="my-4">
@@ -157,63 +185,101 @@ const groupedSellItems = allItems.reduce((acc, item) => {
       </div>
       <h2 className="text-center font-bold mb-4 mt-4">Add item</h2>
 
-      <table className="table-auto w-full mt-6 border">
+      <table className="table-auto w-full mt-6 border-collapse">
         <thead>
-          <tr>
-            <th className="border px-4 py-2">#</th>
-            <th className="border px-4 py-2"> Item Name</th>
-            <th className="border px-4 py-2">Item Category</th>
-            <th className="border px-4 py-2">Item Price</th>
-            <th className="border px-4 py-2">Item Quantity</th>
+          <tr className="bg-gray-200">
+            <th className="border border-gray-300 px-4 py-2">#</th>
+            <th className="border border-gray-300 px-4 py-2">Item Name</th>
+            <th className="border border-gray-300 px-4 py-2">Item Category</th>
+            <th className="border border-gray-300 px-4 py-2">Item Price</th>
+            <th className="border border-gray-300 px-4 py-2">Item Quantity</th>
           </tr>
         </thead>
         <tbody>
           {groupedMenuItemsArray.map((item, index) => (
-            <tr key={item._id}>
-              <td className="border px-4 py-2">{index + 1}</td>{" "}
-              {/* Continuous index */}
-              <td className="border px-4 py-2">{item.name}</td>
-              <td className="border px-4 py-2">{item.category}</td>
-              <td className="border px-4 py-2">{item.price} BDT</td>
-              <td className="border px-4 py-2">{item.quantity}</td>
+            <tr key={item._id} className="even:bg-gray-100">
+              <td className="border border-gray-300 px-4 py-2">{index + 1}</td>
+              <td className="border border-gray-300 px-4 py-2">{item.name}</td>
+              <td className="border border-gray-300 px-4 py-2">
+                {item.category}
+              </td>
+              <td className="border border-gray-300 px-4 py-2">
+                {item.price} BDT
+              </td>
+              <td className="border border-gray-300 px-4 py-2">
+                {item.quantity}
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+
       {/* sale er jnno */}
       <div>
         <h2 className="text-center font-bold mb-4 mt-4">Sell item</h2>
-
         <div className="overflow-x-auto">
-          <table className="table w-full">
+          <table className="w-full border-collapse">
             <thead>
-              <tr>
-                <th>#</th>
-                <th>Item Name</th>
-                <th>Item Price</th>
-                <th>Item Quantity</th>
-                <th>Total Price</th>
+              <tr className="bg-gray-200">
+                <th className="border border-gray-300 p-2">#</th>
+                <th className="border border-gray-300 p-2">Item Name</th>
+                <th className="border border-gray-300 p-2">Item Price</th>
+                <th className="border border-gray-300 p-2">Item Quantity</th>
+                <th className="border border-gray-300 p-2">Total Price</th>
               </tr>
             </thead>
             <tbody>
-          {groupedSellItemsArray.map((item, index) => {
-            const totalPrice = item.price * item.quantity;
-            return (
-              <tr key={`${item.name}-${item.price}`}>
-                <td>{index + 1}</td> 
-                <td>{item.name || "N/A"}</td>
-                <td>{item.price ? `${item.price} BDT` : "N/A"}</td>
-                <td>{item.quantity}</td>
-                <td>{totalPrice ? `${totalPrice} BDT` : "N/A"}</td>
-              </tr>
-            );
-          })}
-        </tbody>
+              {groupedSellItemsArray.map((item, index) => {
+                const totalPrice = item.price * item.quantity;
+                return (
+                  <tr
+                    key={`${item.name}-${item.price}`}
+                    className="even:bg-gray-100"
+                  >
+                    <td className="border border-gray-300 p-2">{index + 1}</td>
+                    <td className="border border-gray-300 p-2">
+                      {item.name || "N/A"}
+                    </td>
+                    <td className="border border-gray-300 p-2">
+                      {item.price ? `${item.price} BDT` : "N/A"}
+                    </td>
+                    <td className="border border-gray-300 p-2">
+                      {item.quantity}
+                    </td>
+                    <td className="border border-gray-300 p-2">
+                      {totalPrice ? `${totalPrice} BDT` : "N/A"}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
           </table>
         </div>
+        {/* Extra Food */}
+        <h2 className="text-xl font-semibold mb-4">Extra Food</h2>
+        <table className="w-full border-collapse">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="border border-gray-300 p-2">#</th>
+              <th className="border border-gray-300 p-2">Item Name</th>
+              <th className="border border-gray-300 p-2">Price</th>
+              <th className="border border-gray-300 p-2">Quantity</th>
+            </tr>
+          </thead>
+          <tbody>
+            {extraFoodItems.map((item, index) => (
+              <tr key={index} className="even:bg-gray-100">
+                <td className="border border-gray-300 p-2">{index + 1}</td>
+                <td className="border border-gray-300 p-2">{item.name}</td>
+                <td className="border border-gray-300 p-2">{item.price} BDT</td>
+                <td className="border border-gray-300 p-2">{item.quantity}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
 };
 
-export default AdminHome;
+export default Report;
