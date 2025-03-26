@@ -3,9 +3,12 @@ import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { FaBook, FaDollarSign, FaUsers } from "react-icons/fa";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+
 
 
 const Report = () => {
+
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const [fromDate, setFromDate] = useState("");
@@ -163,12 +166,20 @@ const Report = () => {
 
 // Add the state to manage table visibility
 const [isTableVisible, setIsTableVisible] = useState(true);
+const navigate = useNavigate();
 
-// Handler for the button click to hide the table and donate to charity
+
 const handleButtonClick = () => {
-  
+  if (extraFoodItems.length === 0) {
+    alert("No extra food to donate.");
+    return; // Don't navigate if there are no extra food items
+  }
+  console.log(extraFoodItems);  // Log to verify data
+  navigate("/dashboard/charity", { state: { extraFoodItems } });
   setIsTableVisible(false); // Hide the table
+  setExtraFoodItems([]); // Optionally clear after donation
 };
+
 
   if (isLoading)
     return (
@@ -302,28 +313,7 @@ const handleButtonClick = () => {
   Donate to Charity
 </button>
 
-        {/* Extra Food */}
-        {/* <h2 className="text-xl font-semibold mb-4">Extra Food</h2>
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-gray-200">
-              <th className="border border-gray-300 p-2">#</th>
-              <th className="border border-gray-300 p-2">Item Name</th>
-              <th className="border border-gray-300 p-2">Price</th>
-              <th className="border border-gray-300 p-2">Quantity</th>
-            </tr>
-          </thead>
-          <tbody>
-            {extraFoodItems.map((item, index) => (
-              <tr key={index} className="even:bg-gray-100">
-                <td className="border border-gray-300 p-2">{index + 1}</td>
-                <td className="border border-gray-300 p-2">{item.name}</td>
-                <td className="border border-gray-300 p-2">{item.price} BDT</td>
-                <td className="border border-gray-300 p-2">{item.quantity}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table> */}
+       
       </div>
     </div>
   );

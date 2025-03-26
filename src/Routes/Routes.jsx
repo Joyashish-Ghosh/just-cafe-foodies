@@ -1,4 +1,3 @@
-
 import { createBrowserRouter } from "react-router-dom";
 import Main from "../Layout/Main";
 import Home from "../pages/Home/Home/Home";
@@ -21,7 +20,7 @@ import AdminHome from "../pages/Dashboard/AdminHome/AdminHome";
 import ChefRoute from "./ChefRoute";
 import ChefHome from "../pages/ChefHome/Chefhome";
 import PaymentSuccess from "../pages/Dashboard/Payment/PaymentSuccess";
-import PaymentHistory from './../pages/Dashboard/PaymentHistory/PaymentHistory';
+import PaymentHistory from "./../pages/Dashboard/PaymentHistory/PaymentHistory";
 import Review from "../pages/Dashboard/Review/Review";
 import CheckReview from "../pages/Dashboard/CheckReview/CheckReview";
 import Report from "../pages/Dashboard/Report/Report";
@@ -95,12 +94,9 @@ export const router = createBrowserRouter([
       },
       {
         path: "review",
-        element: <Review>,</Review>
+        element: <Review>,</Review>,
       },
-      
-      
 
-      
       //admin routes
 
       {
@@ -109,8 +105,9 @@ export const router = createBrowserRouter([
           <AdminRoute>
             <AdminHome></AdminHome>
           </AdminRoute>
-        ),},
-     
+        ),
+      },
+
       {
         path: "addItems",
         element: (
@@ -147,40 +144,41 @@ export const router = createBrowserRouter([
         ),
       },
 
-         {
+      {
         path: "checkReview",
         element: (
           <AdminRoute>
-        <CheckReview></CheckReview>
+            <CheckReview></CheckReview>
           </AdminRoute>
         ),
-       
       },
-         {
+      {
         path: "report",
         element: (
           <AdminRoute>
-         <Report></Report>
+            <Report></Report>
           </AdminRoute>
         ),
       },
-         {
+      {
         path: "charity",
         element: (
           <AdminRoute>
-  <Charity></Charity>
+            <Charity></Charity>
           </AdminRoute>
         ),
-       
       },
 
-
       //chef users
-      
+
       {
-        path: '/dashboard/chef-home',
-        element: <ChefRoute><ChefHome></ChefHome></ChefRoute>
-      }
+        path: "/dashboard/chef-home",
+        element: (
+          <ChefRoute>
+            <ChefHome></ChefHome>
+          </ChefRoute>
+        ),
+      },
     ],
   },
 ]);
