@@ -4,6 +4,7 @@ import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { FaBook, FaDollarSign, FaUsers } from "react-icons/fa";
 
+
 const Report = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
@@ -158,7 +159,16 @@ const Report = () => {
       .filter(Boolean); // Filter out null values
   }, [groupedMenuItemsArray, groupedSellItems]);
 
-  // cherity er jnno
+ 
+
+// Add the state to manage table visibility
+const [isTableVisible, setIsTableVisible] = useState(true);
+
+// Handler for the button click to hide the table and donate to charity
+const handleButtonClick = () => {
+  
+  setIsTableVisible(false); // Hide the table
+};
 
   if (isLoading)
     return (
@@ -255,8 +265,45 @@ const Report = () => {
             </tbody>
           </table>
         </div>
+       {/* Extra Food */}
+<h2 className="text-xl font-semibold mb-4">Extra Food</h2>
+
+{/* Conditionally render the table or message */}
+{isTableVisible ? (
+  <table className="w-full border-collapse">
+    <thead>
+      <tr className="bg-gray-200">
+        <th className="border border-gray-300 p-2">#</th>
+        <th className="border border-gray-300 p-2">Item Name</th>
+        <th className="border border-gray-300 p-2">Price</th>
+        <th className="border border-gray-300 p-2">Quantity</th>
+      </tr>
+    </thead>
+    <tbody>
+      {extraFoodItems.map((item, index) => (
+        <tr key={index} className="even:bg-gray-100">
+          <td className="border border-gray-300 p-2">{index + 1}</td>
+          <td className="border border-gray-300 p-2">{item.name}</td>
+          <td className="border border-gray-300 p-2">{item.price} BDT</td>
+          <td className="border border-gray-300 p-2">{item.quantity}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+) : (
+  <p>No Food Available</p> // Message when table is hidden
+)}
+
+{/* Button to hide the table */}
+<button 
+  onClick={handleButtonClick}
+  className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+>
+  Donate to Charity
+</button>
+
         {/* Extra Food */}
-        <h2 className="text-xl font-semibold mb-4">Extra Food</h2>
+        {/* <h2 className="text-xl font-semibold mb-4">Extra Food</h2>
         <table className="w-full border-collapse">
           <thead>
             <tr className="bg-gray-200">
@@ -276,7 +323,7 @@ const Report = () => {
               </tr>
             ))}
           </tbody>
-        </table>
+        </table> */}
       </div>
     </div>
   );
