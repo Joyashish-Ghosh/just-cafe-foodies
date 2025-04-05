@@ -1,8 +1,11 @@
 import React from "react";
+import { useState } from 'react';
+
 import { useParams, Link } from "react-router-dom";
 
 const PaymentSuccess = () => {
   const { tran_id } = useParams(); // Get the transaction ID from the URL
+  const [showReview, setShowReview] = useState(true);
 
   return (
     <div className="flex justify-center items-center mt-12 ">
@@ -14,10 +17,25 @@ const PaymentSuccess = () => {
           <strong>Transaction ID:</strong> {tran_id}
         </p>
         <Link to="/dashboard/paymentHistory">
-          <button className="bg-blue-950 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-600 mt-4">
+          <button className="bg-blue-950 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-600 mt-4 ">
             Dashboard
           </button>
         </Link>
+        {showReview && (
+          <div className="flex items-center gap-2">
+            <Link to="/dashboard/review">
+              <button className="bg-blue-950 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-600">
+                Add Reviews
+              </button>
+            </Link>
+            <button
+              className="text-sm bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400"
+              onClick={() => setShowReview(false)}
+            >
+              Skip
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
