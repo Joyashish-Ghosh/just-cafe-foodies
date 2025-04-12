@@ -18,10 +18,17 @@ import useChef from "../hooks/useChef";
 
 const Dashboard = () => {
   const [cart] = useCart();
-
-  // TODO:get admin value from the database
   const [isAdmin] = useAdmin();
   const [isChef] = useChef();
+  // const [isAdmin, isAdminLoading] = useAdmin();
+  // const [isChef, isChefLoading] = useChef();
+
+   // Wait until both role checks are done
+  //  if (isAdminLoading || isChefLoading) {
+  //   return <div className="text-center text-xl mt-20 text-blue-700">Loading Dashboard...</div>;
+  // }
+
+  // const isUser = !isAdmin && !isChef;
 
   return (
     <div className="flex">
@@ -78,6 +85,8 @@ const Dashboard = () => {
               </li>
             </>
           )}
+
+          {/* users er jonno */}
           {!isChef && !isAdmin && (
             <>
               <li>
@@ -85,23 +94,18 @@ const Dashboard = () => {
                   <FaHome></FaHome>
                   User Home
                 </NavLink>
-              </li>
+              </li> 
 
-              {/* <li>
-                <NavLink to="/dashboard/history">
-                  <FaCalendar></FaCalendar>
-                  Not History
-                </NavLink>
-              </li> */}
+             
 
-              <li>
+               <li>
                 <NavLink to="/dashboard/cart">
                   <FaShoppingCart></FaShoppingCart>
                   My Cart({cart.length})
                 </NavLink>
-              </li>
+              </li> 
 
-              <li>
+               <li>
                 <NavLink to="/dashboard/review">
                   <FaAd></FaAd>
                   Add Review
@@ -116,6 +120,11 @@ const Dashboard = () => {
               </li>
             </>
           )}
+
+          
+          
+
+
           {isChef && (
             <>
               <li>

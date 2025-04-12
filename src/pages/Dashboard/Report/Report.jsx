@@ -138,7 +138,7 @@ const Report = () => {
   const groupedSellItemsArray = Object.values(groupedSellItems);
 
   //extra food
-  const extraFoodItems = useMemo(() => {
+  const extraFoodItems = useMemo(() => { 
     return groupedMenuItemsArray
       .map((addItem) => {
         const sellItem = groupedSellItems[
@@ -155,6 +155,7 @@ const Report = () => {
             name: addItem.name,
             price: addItem.price,
             quantity: addItemQuantity - soldQuantity,
+            date : addItem.date
           };
         }
         return null;
@@ -169,16 +170,38 @@ const [isTableVisible, setIsTableVisible] = useState(true);
 const navigate = useNavigate();
 
 
-const handleButtonClick = () => {
+const handleButtonClick = async () => {
   if (extraFoodItems.length === 0) {
     alert("No extra food to donate.");
-    return; // Don't navigate if there are no extra food items
+    return;
   }
-  console.log(extraFoodItems);  // Log to verify data
-  navigate("/dashboard/charity", { state: { extraFoodItems } });
-  setIsTableVisible(false); // Hide the table
-  setExtraFoodItems([]); // Optionally clear after donation
+
+  try {
+    const response = await fetch("http://localhost:5000/extra-food", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(extraFoodItems),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert("✅ Extra food donated successfully!");
+      setIsTableVisible(false);
+      navigate("/dashboard/charity")
+      // setExtraFoodItems([]); <-- Can't call this directly since extraFoodItems is from useMemo
+    } else {
+      alert("❌ Donation failed: " + data.error);
+    }
+  } catch (error) {
+    console.error("Error posting extra food:", error);
+    alert("❌ An error occurred while donating food.");
+  }
 };
+
+
 
 
   if (isLoading)

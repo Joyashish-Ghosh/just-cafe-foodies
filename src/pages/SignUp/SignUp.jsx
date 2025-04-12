@@ -59,7 +59,10 @@ const SignUp = () => {
                 <div className="hero-content flex-col lg:flex-row-reverse">
                     <div className="text-center lg:text-left">
                         <h1 className="text-5xl font-bold">Sign Up now!</h1>
-                        <p className="py-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
+                        <p  className="mt-2 py-6  border-gray-500  text-blue-800 p-4 text-left">
+  Welcome to Just Cafe Foodies! We're excited to have you with us. Explore our menu to discover a variety of delicious dishes and beverages. Whether you're here for a quick snack or a full meal, we have something for everyone. Enjoy your journey with us, and don't forget to add your favorite items to your cart!
+</p>
+
                     </div>
                     <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
                         <form onSubmit={handleSubmit(onSubmit)} className="card-body">

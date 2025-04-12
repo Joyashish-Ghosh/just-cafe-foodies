@@ -63,7 +63,7 @@ const FoodCard = ({ item }) => {
       <figure>
         <img src={image} alt="food" />
       </figure>
-      <p className=" absolute right-0 mr-4 mt-4 px-4 bg-slate-900">
+      <p className=" absolute right-0 mr-2 px-3 bg-gray-400 text-blue-800 font-bold rounded-md">
         BDT {price}
       </p>
       <div className="card-body flex flex-col items-center">
@@ -72,9 +72,9 @@ const FoodCard = ({ item }) => {
         <div className="card-actions justify-end">
           <button
             onClick={handleAddToCart}
-            className="btn btn-outline bg-indigo-900 border-0 border-b-4 border-orange-400 mt-4 "
+            className="btn btn-outline bg-gray-400 text-blue-950 font-bold rounded-md mt-4 "
           >
-            Add toCart
+            Add to Cart
           </button>
         </div>
       </div>

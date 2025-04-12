@@ -13,6 +13,9 @@ const Navbar = () => {
   const [isChef] = useChef();
   const [cart] = useCart();
 
+  // Check if the user is neither an admin nor chef
+  const isUser = isAdmin === false && isChef === false;
+
   const handleLogOut = () => {
     logOut()
       .then(() => { })
@@ -38,6 +41,8 @@ const Navbar = () => {
       </Link></li>
     }
 
+{/* Show the cart only for non-admin and non-chef */}
+{isUser && (
     <li>
       <Link to="/dashboard/cart">
         <button className="btn min-h-0 h-8">
@@ -46,7 +51,7 @@ const Navbar = () => {
         </button>
       </Link>
      </li>
-
+   )}
 
 
     {
