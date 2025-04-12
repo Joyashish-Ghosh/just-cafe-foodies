@@ -133,6 +133,12 @@ const Dashboard = () => {
                   Chef Home
                 </NavLink>
               </li>
+              <li>
+                <NavLink to="/dashboard/waiter">
+                  <FaHome></FaHome>
+                  Waiter
+                </NavLink>
+              </li>
             </>
           )}
 

@@ -25,6 +25,7 @@ import Review from "../pages/Dashboard/Review/Review";
 import CheckReview from "../pages/Dashboard/CheckReview/CheckReview";
 import Report from "../pages/Dashboard/Report/Report";
 import Charity from "../pages/Dashboard/Report/Charity";
+import Waiter from "../pages/ChefHome/Waiter";
 
 export const router = createBrowserRouter([
   {
@@ -176,6 +177,14 @@ export const router = createBrowserRouter([
         element: (
           <ChefRoute>
             <ChefHome></ChefHome>
+          </ChefRoute>
+        ),
+      },
+      {
+        path: "/dashboard/waiter",
+        element: (
+          <ChefRoute>
+<Waiter></Waiter>,
           </ChefRoute>
         ),
       },

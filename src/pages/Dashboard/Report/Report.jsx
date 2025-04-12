@@ -234,7 +234,6 @@ const handleButtonClick = async () => {
           <tr className="bg-gray-200">
             <th className="border border-gray-300 px-4 py-2">#</th>
             <th className="border border-gray-300 px-4 py-2">Item Name</th>
-            <th className="border border-gray-300 px-4 py-2">Item Category</th>
             <th className="border border-gray-300 px-4 py-2">Item Price</th>
             <th className="border border-gray-300 px-4 py-2">Item Quantity</th>
           </tr>
@@ -343,3 +342,4 @@ const handleButtonClick = async () => {
 };
 
 export default Report;
+ 
