@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const CheckReview = () => {
-  const axiosSecure = useAxiosSecure(); // Initialize axiosSecure
+  const axiosSecure = useAxiosSecure();
   const [reviews, setReviews] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
   const [filteredReviews, setFilteredReviews] = useState([]);
@@ -12,8 +12,14 @@ const CheckReview = () => {
     const fetchReviews = async () => {
       try {
         const response = await axiosSecure.get("/reviews");
-        setReviews(response.data); // Store all reviews in state
-        setFilteredReviews(response.data); // Initialize filtered reviews with all reviews
+
+        // Sort descending based on date
+        const sortedReviews = [...response.data].sort(
+          (a, b) => new Date(b.date || 0) - new Date(a.date || 0)
+        );
+
+        setReviews(sortedReviews);
+        setFilteredReviews(sortedReviews);
       } catch (error) {
         console.error("Error fetching reviews:", error);
       }
@@ -22,16 +28,25 @@ const CheckReview = () => {
     fetchReviews();
   }, [axiosSecure]);
 
-  // Filter reviews based on selected date
+  // Filter reviews by selected date
   const handleDateChange = (e) => {
-    setSelectedDate(e.target.value); // Set selected date
-    const filtered = reviews.filter((review) => review.date === e.target.value);
-    setFilteredReviews(filtered); // Update filtered reviews based on selected date
+    const selected = e.target.value;
+    setSelectedDate(selected);
+
+    const filtered = reviews.filter((review) => review.date === selected);
+
+    // Optional: sort filtered reviews too, just to be safe
+    const sortedFiltered = [...filtered].sort(
+      (a, b) => new Date(b.date || 0) - new Date(a.date || 0)
+    );
+
+    setFilteredReviews(sortedFiltered);
   };
 
   return (
     <div>
       <h2 className="text-2xl font-bold">Check Reviews</h2>
+
       <div className="my-4">
         <label htmlFor="date" className="mr-2">Search by Date:</label>
         <input
@@ -44,7 +59,7 @@ const CheckReview = () => {
       </div>
 
       <div className="mt-6">
-        <table className="table-auto w-full mt-6 border">
+        <table className="table-auto w-full border">
           <thead>
             <tr>
               <th className="border px-4 py-2">Name</th>
@@ -55,7 +70,9 @@ const CheckReview = () => {
           <tbody>
             {filteredReviews.length === 0 ? (
               <tr>
-                <td colSpan="4" className="text-center py-2">No reviews found for the selected date.</td>
+                <td colSpan="3" className="text-center py-2">
+                  No reviews found for the selected date.
+                </td>
               </tr>
             ) : (
               filteredReviews.map((review) => (

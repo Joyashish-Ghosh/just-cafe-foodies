@@ -4,22 +4,22 @@ import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const ChefHome = () => {
   const [status, isStatusPending, refetch] = useChefStatus();
-  const [selectedItem, setSelectedItem] = useState(null); // now holds the full item
+  const [selectedItem, setSelectedItem] = useState(null); // full item object
   const [newWaitingTime, setNewWaitingTime] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const axiosPublic = useAxiosPublic();
 
-  // Handle waiting time change
+  // Change wait time handler
   const handleChangeWaitTime = async () => {
     setIsSubmitting(true);
     try {
-      const time = { newWaitingTime };
-      const res = await axiosPublic.put(`/chef/wait-time/${selectedItem._id}`, time);
-      console.log(res.data);
+      const res = await axiosPublic.put(`/chef/wait-time/${selectedItem._id}`, {
+        newWaitingTime,
+      });
 
       if (res.data.result) {
-        await refetch(); // Wait for latest data
+        await refetch();
         setNewWaitingTime("");
         setSelectedItem(null); // Close modal
       }
@@ -30,6 +30,12 @@ const ChefHome = () => {
     }
   };
 
+  // Sort the status data by payment_date in descending order
+  const sortedStatus = status?.sort((a, b) => {
+    if (!a.payment_date || !b.payment_date) return 0; // If payment_date is not available, don't sort
+    return new Date(b.payment_date) - new Date(a.payment_date); // Sort by descending payment_date
+  });
+
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Cart Summary</h1>
@@ -39,31 +45,29 @@ const ChefHome = () => {
             <tr>
               <th>#</th>
               <th>Date & Time</th>
-
               <th className="border border-gray-300 p-2">Item Name</th>
-              <th>Email</th>
-              <th>Phone</th>
+              {/* <th>Email</th> */}
+              {/* <th>Phone</th> */}
               <th>Number of Items</th>
               <th>Waiting Time</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {status?.length > 0 ? (
-              status.map((item, index) => (
+            {sortedStatus?.length > 0 ? (
+              sortedStatus.map((item, index) => (
                 <tr key={item._id}>
                   <th>{index + 1}</th>
                   <td>
-  {item?.payment_date
-    ? new Date(item.payment_date).toLocaleString("en-BD", {
-        dateStyle: "medium",
-        timeStyle: "short",
-      })
-    : "N/A"}
-</td>
-
-                  <td className="border border-gray-300 p-2">
-                    {item.cart && item.cart.length > 0 ? (
+                    {item?.payment_date
+                      ? new Date(item.payment_date).toLocaleString("en-BD", {
+                          dateStyle: "medium",
+                          timeStyle: "short",
+                        })
+                      : "N/A"}
+                  </td>
+                  <td>
+                    {item.cart?.length > 0 ? (
                       <ul className="list-disc list-inside">
                         {item.cart.map((cartItem) => (
                           <li key={cartItem._id}>{cartItem.name}</li>
@@ -73,13 +77,13 @@ const ChefHome = () => {
                       "No items"
                     )}
                   </td>
-                  <td>{item?.cus_email}</td>
-                  <td>{item?.cus_phone}</td>
-                  <td>{item?.cart.length}</td>
-                  <td>{item?.waiting_time || "N/A"}</td>
+                  {/* <td>{item.cus_email}</td> */}
+                  {/* <td>{item.cus_phone}</td> */}
+                  <td>{item.cart.length}</td>
+                  <td>{item.waiting_time || "N/A"}</td>
                   <td>
                     <button
-                      className="text-white bg-green-950 px-3 py-2 rounded-md"
+                      className="text-white font-semibold hover:bg-blue-700 bg-blue-950 px-3 py-2 rounded-md"
                       onClick={() => setSelectedItem(item)}
                     >
                       Change Time
@@ -89,7 +93,7 @@ const ChefHome = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="7" className="text-center">
+                <td colSpan="8" className="text-center">
                   No data available.
                 </td>
               </tr>
@@ -104,8 +108,7 @@ const ChefHome = () => {
           <div className="modal-box">
             <h3 className="font-bold text-lg">Change Waiting Time</h3>
             <p className="py-4">
-              Update the waiting time for{" "}
-              <strong>{selectedItem.cus_email}</strong>
+              Update the waiting time for <strong>{selectedItem.cus_email}</strong>
             </p>
             <input
               type="number"
@@ -121,9 +124,6 @@ const ChefHome = () => {
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Submitting..." : "Submit"}
-              </button>
-              <button className="btn" onClick={() => setSelectedItem(null)}>
-                Close
               </button>
             </div>
           </div>
