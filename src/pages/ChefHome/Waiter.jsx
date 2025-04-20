@@ -28,24 +28,33 @@ const Waiter = () => {
   }, []);
 
   const handleOkClick = async (order) => {
+    const confirmed = window.confirm("Submit this order successfully?");
+    if (!confirmed) return;
+
+    const orderToSubmit = {
+      order_id: order._id,
+      cart: order.cart,
+      payment_date: order.payment_date,
+      waiting_time: order.waiting_time,
+    };
+
     try {
-      console.log("Sending order to backend:", order);  // Log the order data
-      const res = await axiosPublic.post("/waiter/submit", order, {
+      const res = await axiosPublic.post("/waiter/submit", orderToSubmit, {
         headers: {
           "Content-Type": "application/json",
         },
       });
       if (res.data?.success) {
         setSubmittedOrders((prev) => [...prev, order._id]);
+        alert("Order submitted successfully.");
       } else {
-        alert("Failed to submit the order to kitchen.");
+        alert("Failed to submit order.");
       }
     } catch (err) {
       console.error("Error submitting order:", err);
       alert("Server error while submitting order.");
     }
   };
-  
 
   if (loading) {
     return <div>Loading orders...</div>;
@@ -65,18 +74,16 @@ const Waiter = () => {
             <tr>
               <th>#</th>
               <th>Date & Time</th>
-              <th className="border border-gray-300 p-2">Item Name</th>
-              {/* <th>Email</th> */}
-              {/* <th>Phone</th> */}
+              <th>Item Name</th>
               <th>Number of Items</th>
               <th>Waiting Time</th>
-              {/* <th>Action</th> New column for OK checkbox */}
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {sortedOrders.length > 0 ? (
               sortedOrders.map((item, index) => (
-                <tr key={item._id}>
+                <tr key={item._id} className={submittedOrders.includes(item._id) ? "bg-green-100" : ""}>
                   <th>{index + 1}</th>
                   <td>
                     {item?.payment_date
@@ -97,21 +104,19 @@ const Waiter = () => {
                       "No items"
                     )}
                   </td>
-                  {/* <td>{item.cus_email}</td> */}
-                  {/* <td>{item.cus_phone}</td> */}
                   <td>{item.cart.length}</td>
                   <td>{item.waiting_time || "N/A"}</td>
-                  {/* <td>
+                  <td>
                     <label className="text-red-500 font-medium">
                       <input
                         type="checkbox"
                         className="mr-1 accent-red-500"
                         onChange={() => handleOkClick(item)}
                         disabled={submittedOrders.includes(item._id)}
-                      />{" "}
+                      />
                       OK
                     </label>
-                  </td> */}
+                  </td>
                 </tr>
               ))
             ) : (

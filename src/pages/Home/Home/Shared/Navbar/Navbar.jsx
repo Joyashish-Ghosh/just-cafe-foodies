@@ -58,7 +58,7 @@ const Navbar = () => {
       user ? <>
       {/* photo add korar logic */}
       {/* <span>{user?.displayName}</span> */}
-        <button onClick={handleLogOut} className="btn btn-ghost">LogOut</button>
+        <div onClick={handleLogOut} className="btn btn-sm pt-[4px] btn-ghost">LogOut</div>
       </> : <>
         <li><Link to="/login">Login</Link></li>
 

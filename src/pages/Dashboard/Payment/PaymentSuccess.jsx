@@ -22,19 +22,19 @@ const PaymentSuccess = () => {
           </button>
         </Link>
         {showReview && (
-          <div className="flex justify-end items-center gap-2">
-            <Link to="/dashboard/review">
-              <button className="mt-4 bg-blue-950 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-600">
-                Add Reviews
-              </button>
-            </Link>
-            <button
-              className="text-sm bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400"
-              onClick={() => setShowReview(false)}
-            >
-              Skip
+          <div className="flex items-end justify-end mr-5"><div className="flex items-center justify-center gap-2">
+          <Link to="/dashboard/review">
+            <button className=" btn bg-blue-950 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-600">
+              Add Reviews
             </button>
-          </div>
+          </Link>
+          <button
+            className="btn  bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400"
+            onClick={() => setShowReview(false)}
+          >
+            Skip
+          </button>
+        </div></div>
         )}
       </div>
     </div>

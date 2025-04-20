@@ -83,6 +83,12 @@ const Dashboard = () => {
                   Charity
                 </NavLink>
               </li>
+              <li>
+                <NavLink to="/dashboard/deliverFood">
+                  <FaBook></FaBook>
+                  Delivery Food
+                </NavLink>
+              </li>
             </>
           )}
 
