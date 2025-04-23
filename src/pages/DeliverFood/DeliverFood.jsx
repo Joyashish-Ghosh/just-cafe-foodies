@@ -3,8 +3,15 @@ import { useEffect, useState } from "react";
 const DeliverFood = () => {
   const [deliveredItems, setDeliveredItems] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Default fromDate: 30 days ago
   const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState(new Date().toISOString().split("T")[0]); // Default to today
+
+  // const [fromDate, setFromDate] = useState(
+  //   new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]
+  // );
+  // Default toDate: today
+  const [toDate, setToDate] = useState(new Date().toISOString().split("T")[0]);
 
   useEffect(() => {
     const fetchDeliveredItems = async () => {
@@ -14,43 +21,47 @@ const DeliverFood = () => {
         const data = await response.json();
 
         if (response.ok) {
-          // Filter items based on selected date range
           const filteredItems = data.filter((order) => {
             const orderDate = new Date(order.payment_date);
             const from = new Date(fromDate);
             const to = new Date(toDate);
-            return (
-              (!fromDate || orderDate >= from) &&
-              (!toDate || orderDate <= to)
-            );
+            to.setHours(23, 59, 59, 999); // Include full day of toDate
+
+            return (!fromDate || orderDate >= from) && (!toDate || orderDate <= to);
           });
 
-          // Extract cart items and include additional fields (payment_date, waiting_time, and status)
-          const cartItems = filteredItems.flatMap((order) => 
-            order.cart.map((item) => ({
-              name: item.name,
-              quantity: item.quantity,
-              price: item.price,
-              payment_date: order.payment_date,
-              waiting_time: order.waiting_time, // Assuming it's available in the order object
-              status: order.status, // Assuming it's available in the order object
-            }))
+          const cartItems = filteredItems.flatMap((order) =>
+            Array.isArray(order.cart)
+              ? order.cart.map((item) => ({
+                  name: item?.name || "Unknown",
+                  quantity: item?.quantity || 0,
+                  price: item?.price || 0,
+                  payment_date: order.payment_date,
+                  waiting_time: order.waiting_time || 0,
+                  status: order.status || "Unknown",
+                }))
+              : []
           );
 
-          // Sort cartItems by payment_date (descending) and waiting_time (descending)
-          cartItems.sort((a, b) => {
-            const dateA = new Date(a.payment_date);
-            const dateB = new Date(b.payment_date);
+          // Group items by payment_date
+          const groupedItems = cartItems.reduce((acc, item) => {
+            const date = item.payment_date.split("T")[0]; // Group by date (yyyy-mm-dd)
+            if (!acc[date]) {
+              acc[date] = [];
+            }
+            acc[date].push(item);
+            return acc;
+          }, {});
 
-            // First, compare by payment_date in descending order (latest dates first)
-            if (dateA > dateB) return -1;
-            if (dateA < dateB) return 1;
+          // Sort grouped items by date in descending order
+          const sortedGroupedItems = Object.keys(groupedItems)
+            .sort((a, b) => new Date(b) - new Date(a)) // Sort dates in descending order
+            .reduce((acc, date) => {
+              acc[date] = groupedItems[date];
+              return acc;
+            }, {});
 
-            // If dates are the same, compare by waiting_time in descending order (longer waiting times first)
-            return b.waiting_time - a.waiting_time;
-          });
-
-          setDeliveredItems(cartItems); // Set the sorted cart data
+          setDeliveredItems(sortedGroupedItems);
         } else {
           console.error("Failed to load delivered items:", data.message);
         }
@@ -66,7 +77,6 @@ const DeliverFood = () => {
     }
   }, [fromDate, toDate]);
 
-  // Handle date input changes
   const handleDateChange = (e, setDate) => {
     setDate(e.target.value);
   };
@@ -74,17 +84,16 @@ const DeliverFood = () => {
   return (
     <div className="my-12 flex justify-center">
       <div className="w-full max-w-4xl px-6 bg-gradient-to-r from-purple-50 via-blue-50 to-teal-50 p-6 rounded-lg">
-        {/* Heading */}
         <h2 className="text-3xl text-teal-600 font-bold mb-4 text-center">Deliver Food</h2>
 
-        {/* Date Filter Inputs - Left Aligned with Blue Background */}
+        {/* Date filters */}
         <div className="flex justify-start mb-4 bg-blue-50 p-4 rounded-lg shadow-md">
           <div className="mr-4">
             <label className="mr-2">From Date:</label>
             <input
               type="date"
               value={fromDate}
-              onChange={(e) => handleDateChange(e, setFromDate)}
+              onChange={(e) => handleDateChange(e, setFromDate)} // Handle change for fromDate
               className="border p-2 rounded"
             />
           </div>
@@ -99,38 +108,50 @@ const DeliverFood = () => {
           </div>
         </div>
 
-        {/* Loading State */}
         {loading ? (
           <p className="text-lg text-blue-500 text-center">Loading delivered items...</p>
-        ) : deliveredItems.length > 0 ? (
-          <table className="w-full border-collapse bg-purple-100">
-            <thead className="bg-teal-500 text-white">
-              <tr>
-                <th className="border border-gray-300 p-2">#</th>
-                <th className="border border-gray-300 p-2">Item Name</th>
-                <th className="border border-gray-300 p-2">Price</th>
-                <th className="border border-gray-300 p-2">Quantity</th>
-                <th className="border border-gray-300 p-2">Payment Date</th>
-                <th className="border border-gray-300 p-2">Waiting Time</th>
-                <th className="border border-gray-300 p-2">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {deliveredItems.map((item, index) => (
-                <tr key={index} className="even:bg-blue-100 odd:bg-purple-200">
-                  <td className="border border-gray-300 p-2">{index + 1}</td>
-                  <td className="border border-gray-300 p-2">{item.name}</td>
-                  <td className="border border-gray-300 p-2">{item.price} BDT</td>
-                  <td className="border border-gray-300 p-2">{item.quantity}</td>
-                  <td className="border border-gray-300 p-2">
-                    {new Date(item.payment_date).toLocaleString()}
-                  </td>
-                  <td className="border border-gray-300 p-2">{item.waiting_time} min</td>
-                  <td className="border border-gray-300 p-2">{item.status}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        ) : Object.keys(deliveredItems).length > 0 ? (
+          <div>
+            {Object.keys(deliveredItems).map((date) => (
+              <div key={date} className="mb-6">
+                <h3 className="text-2xl text-teal-600 font-semibold text-center mb-4">
+                  Orders for {new Date(date).toLocaleDateString()}
+                </h3>
+                <table className="w-full border-collapse bg-purple-100">
+                  <thead className="bg-teal-500 text-white">
+                    <tr>
+                      <th className="border border-gray-300 p-2">#</th>
+                      <th className="border border-gray-300 p-2">Item Name</th>
+                      <th className="border border-gray-300 p-2">Price</th>
+                      <th className="border border-gray-300 p-2">Quantity</th>
+                      <th className="border border-gray-300 p-2">Payment Date</th>
+                      <th className="border border-gray-300 p-2">Waiting Time</th>
+                      <th className="border border-gray-300 p-2">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {deliveredItems[date].map((item, index) => (
+                      <tr key={index} className="even:bg-blue-100 odd:bg-purple-200">
+                        <td className="border border-gray-300 p-2">{index + 1}</td>
+                        <td className="border border-gray-300 p-2">
+                          {item.name}
+                          {/* Circle point for items from the same date */}
+                          <span className="ml-2 inline-block w-2.5 h-2.5 bg-teal-600 rounded-full"></span>
+                        </td>
+                        <td className="border border-gray-300 p-2">{item.price} BDT</td>
+                        <td className="border border-gray-300 p-2">{item.quantity}</td>
+                        <td className="border border-gray-300 p-2">
+                          {new Date(item.payment_date).toLocaleString()}
+                        </td>
+                        <td className="border border-gray-300 p-2">{item.waiting_time} min</td>
+                        <td className="border border-gray-300 p-2">{item.status}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ))}
+          </div>
         ) : (
           <p className="text-red-500 text-center">No delivered food items found.</p>
         )}

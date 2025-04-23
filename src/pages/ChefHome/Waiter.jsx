@@ -28,7 +28,7 @@ const Waiter = () => {
   }, []);
 
   const handleOkClick = async (order) => {
-    const confirmed = window.confirm("Submit this order successfully?");
+    const confirmed = window.confirm("Served this order successfully?");
     if (!confirmed) return;
 
     const orderToSubmit = {
@@ -46,7 +46,7 @@ const Waiter = () => {
       });
       if (res.data?.success) {
         setSubmittedOrders((prev) => [...prev, order._id]);
-        alert("Order submitted successfully.");
+        alert("Order served successfully.");
       } else {
         alert("Failed to submit order.");
       }
